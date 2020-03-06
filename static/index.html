@@ -37,8 +37,10 @@ function sendJSONXMLHTTPRequest(url, objects, callback) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState==4) {
             try {
-                if (xhr.status===200) {
-                    callback(JSON.parse(xhr.responseText))
+                if (xhr.status==200) {
+                    if (callback !== null){
+                        callback(JSON.parse(xhr.responseText))
+                    }
                     //XXX: parse some JSON from the request!
                     //XXX: Pass the data to the callback!
                 }
@@ -250,16 +252,16 @@ mouse = (function() {
 // Add the application specific mouse listeners!
 //XXX: TODO Make these prettier!
 mouse.mousedowners.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y,'colour':"#BEE7E9",'radius':30*Math.random()});
+    addEntityWithoutName({'x':x,'y':y,'colour':"#BEE7E9",'radius':1+30*Math.random()});
 });
 
 mouse.mouseuppers.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y,'colour':"#BEEDC7",'radius':30*Math.random()});
+    addEntityWithoutName({'x':x,'y':y,'colour':"#BEEDC7",'radius':1+30*Math.random()});
 });
 
 mouse.mousedraggers.push(function(x,y,clicked,e) {
     addEntityWithoutName({'x':x,'y':y,'colour':'#A0EEE1',
-                          'radius':30*Math.random()});
+                          'radius':1+30*Math.random()});
 });
 
 function update() {
@@ -268,7 +270,7 @@ function update() {
     let retrive_data = new XMLHttpRequest();
     retrive_data.open('GET',url);
     retrive_data.send();
-    retrive_data.onload=()=>{world = JSON.parse(retrive_data.response);
+    retrive_data.onload=function(){world = JSON.parse(retrive_data.response);
         drawNextFrame();
     }
     drawFrame();
